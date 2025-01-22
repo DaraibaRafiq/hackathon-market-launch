@@ -1,49 +1,51 @@
-import { defineType } from "sanity"
-
-export const product = defineType({
-    name: "product",
-    title: "Product",
-    type: "document",
+export default {
+    name: 'product',
+    type: 'document',
+    title: 'Product',
     fields: [
-        {
-            name: "title",
-            title: "Title",
-            validation: (rule) => rule.required(),
-            type: "string"
+      {
+        name: 'name',
+        type: 'string',
+        title: 'Name',
+      },
+      {
+        name: 'image',
+        type: 'image',
+        title: 'Image',
+        options: {
+          hotspot: true, // Enable image cropping
         },
-        {
-            name:"description",
-            type:"text",
-            validation: (rule) => rule.required(),
-            title:"Description",
-        },
-        {
-            name: "productImage",
-            type: "image",
-            validation: (rule) => rule.required(),
-            title: "Product Image"
-        },
-        {
-            name: "price",
-            type: "number",
-            validation: (rule) => rule.required(),
-            title: "Price",
-        },
-        {
-            name: "tags",
-            type: "array",
-            title: "Tags",
-            of: [{ type: "string" }]
-        },
-        {
-            name:"dicountPercentage",
-            type:"number",
-            title:"Discount Percentage",
-        },
-        {
-            name:"isNew",
-            type:"boolean",
-            title:"New Badge",
-        }
-    ]
-})
+      },
+      {
+        name: 'price',
+        type: 'number',
+        title: 'Price',
+      },
+      {
+        name: 'description',
+        type: 'text',
+        title: 'Description',
+      },
+      {
+        name: 'discountPercentage',
+        type: 'number',
+        title: 'Discount Percentage',
+      },
+      {
+        name: 'isFeaturedProduct',
+        type: 'boolean',
+        title: 'Featured Product',
+      },
+      {
+        name: 'stockLevel',
+        type: 'number',
+        title: 'Stock Level',
+      },
+      {
+        name: 'category',
+        type: 'string',
+        title: 'Category',
+      },
+    ],
+  };
+  

@@ -51,7 +51,11 @@ export default function Navbar() {
             </Link>
             <Link href="/contact" className="text-gray-800 hover:text-black">
               Contact
-            </Link>
+            </Link> 
+            <Link href="/shopnow" className="text-gray-800 hover:text-black">
+              ShopNow
+            </Link> 
+            
           </nav>
         </div>
 

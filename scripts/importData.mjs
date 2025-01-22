@@ -1,13 +1,16 @@
 import { createClient } from '@sanity/client';
+import fetch from 'node-fetch';
 
+// Initialize Sanity client
 const client = createClient({
-  projectId: 'your-project-id',
-  dataset: 'production',
-  useCdn: true,
+  projectId: "ibh3ozqb",
+  dataset: "production",
+  useCdn: false, // Set to true if you want faster reads
   apiVersion: '2025-01-13',
-  token: 'your-auth-token',
+  token: "skp06snqoX7ArmCciTp0t2iDIfQOqVrUoFaQJNZtV8KAg0GKhw3lMAiCh1hV7tlguQX2XtXyWYfu0v7hmYichtjvJuyW73woDvl56rfOjA7cWrz9twlWFRPg3KCP5GsQrqUjkjWmP2Lbeho0g75dKmryLvIwTK9D8wNXmVY6LleuA0xit4cs", // Replace with your Sanity token
 });
 
+// Function to upload an image to Sanity
 async function uploadImageToSanity(imageUrl) {
   try {
     console.log(`Uploading image: ${imageUrl}`);
@@ -32,45 +35,49 @@ async function uploadImageToSanity(imageUrl) {
   }
 }
 
+// Function to upload a single product to Sanity
 async function uploadProduct(product) {
   try {
-    const imageId = await uploadImageToSanity(product.imageUrl);
+    const imageId = await uploadImageToSanity(product.imagePath);
 
     if (imageId) {
       const document = {
         _type: 'product',
-        title: product.title,
-        price: product.price,
-        productImage: {
+        id: product.id,
+        name: product.name,
+        image: {
           _type: 'image',
           asset: {
             _ref: imageId,
           },
         },
-        tags: product.tags,
-        dicountPercentage: product.dicountPercentage, // Typo in field name: dicountPercentage -> discountPercentage
+        price: parseFloat(product.price), // Ensure the price is a number
         description: product.description,
-        isNew: product.isNew,
+        discountPercentage: product.discountPercentage,
+        isFeaturedProduct: product.isFeaturedProduct,
+        stockLevel: product.stockLevel,
+        category: product.category,
       };
 
       const createdProduct = await client.create(document);
-      console.log(`Product ${product.title} uploaded successfully:`, createdProduct);
+      console.log(`Product "${product.name}" uploaded successfully:`, createdProduct);
     } else {
-      console.log(`Product ${product.title} skipped due to image upload failure.`);
+      console.log(`Product "${product.name}" skipped due to image upload failure.`);
     }
   } catch (error) {
     console.error('Error uploading product:', error);
   }
 }
 
-async function importProducts() {
+// Function to fetch products from the provided API and upload them to Sanity
+async function migrateProducts() {
   try {
-    const response = await fetch('https://template6-six.vercel.app/api/products');
-    
+    const response = await fetch('https://template-0-beta.vercel.app/api/product');
+
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
-    
+
     const products = await response.json();
 
     for (const product of products) {
@@ -81,4 +88,5 @@ async function importProducts() {
   }
 }
 
-importProducts();
+// Start the migration
+migrateProducts();

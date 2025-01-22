@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable */
-// @ts-nocheck
 
 import BreadCrumb from "@/components/BreadCrumb";
 import Service from "@/components/Service";
